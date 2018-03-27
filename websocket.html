@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script src="lib/jquery-3.3.1.min.js"></script>
+		<script type='text/javascript'>
+			$(document).ready(function(){
+				if(window.WebSocket){
+					console.log('This browser supports WebSocket');
+					$("#buttons").show()
+				}else{
+					console.log('This browser does not supports WebSocket');
+					$("#buttons").hide()
+				}
+			});
+			var ws;
+			
+			function start(){
+				ws = new WebSocket("wss://api.huobipro.com/ws");
+				
+				ws.onopen = function(){
+					ws.send("{'sub':'market.ethusdt.trade.detail','id': 'id10'}");
+				}
+			
+				ws.onmessage = function(evt){
+				  //console.log(evt.data)
+				  var dat = evt.data;
+				  for(var d in dat){
+				  	console.log(d)
+				  }
+				};
+			}
+			
+			function close(){
+				ws.close();
+			}
+		</script>
+		<style type='text/css'>
+			
+		</style>
+	</head>
+	
+	<body>
+		<div id='buttons'>
+			<input type='button' onclick='start()' value='开始' />
+			<input type='button' onclick='' value='停止' />
+		</div>
+	</body>
+</html>
