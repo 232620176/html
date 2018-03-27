@@ -17,6 +17,9 @@
 	
 	<body>
 		<div ng-app="">
+			<div ng-controller="timeController">
+				<h1>{{clock.now}}</h1>
+			</div>
 			<p>Try to enter a name: </p>
 			<p>name: <input type="text" ng-model="name" /></p>
 			Hello, <p ng-bind="name"></p>
@@ -28,7 +31,18 @@
 		<script src="./lib/angular.min.js" type="text/javascript"></script>
 		<script src="./lib/angular-route.min.js" type="text/javascript"></script>
 		<script type='text/javascript'>
-				
+				function timeController($scope){
+					$scope.clock = {
+						now: new Date()
+					};
+					var updateClock = function(){
+						$scope.clock.now = new Date()
+					}
+					setInterval(function(){
+						$scope.$apply(updateClock);
+					}, 1000);
+					updateClock();
+				}
 		</script>
 	</body>
 </html>
