@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link src="./lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-		<link src="./lib/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
-		<link src="./lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+		<link href="./lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="./lib/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
+		<link href="./lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
 		<style type='text/css'>
 			
 		</style>
@@ -16,33 +16,232 @@
 	</head>
 	
 	<body>
-		<div ng-app="">
+		<div ng-app="myApp" class="container">
 			<div ng-controller="timeController">
-				<h1>{{clock.now}}</h1>
+				<h1>{{clock.now | date:'medium'}}</h1>
 			</div>
-			<p>Try to enter a name: </p>
-			<p>name: <input type="text" ng-model="name" /></p>
-			Hello, <p ng-bind="name"></p>
+			<my-directive></my-directive>
+			<hr />
+			<div ng-controller="numberController">
+				<h4>The simplest adding machine ever: Current count: {{counter}}</h4>
+				<button ng-click="add(1)" class="button">Add</button>
+				<a ng-click="subtract(1)" class="button alert">Subtract</a>
+			</div>
+			<hr />
+			<div class="row-fluid">
+				<div class="col-12">Try to enter a name: </div>
+			</div>
+			<div class="row-fluid">
+				<div class="col-4">name: </div>
+				<div class="col-8"><input type="text" ng-model="name" ng-maxlength="5"/></div>
+			</div>
+			<div class="row-fluid">
+				Hello, {{name | number:2}} | {{name | currency}} <p ng-bind="name"></p>
+			</div>
+			<hr />
+			<div ng-controller="SomeController">
+				{{ someModel.someValue }}
+				<button ng-click="someAction()">Communicate to child</button>
+				<div ng-controller="ChildController">
+					{{ someModel.someValue }}
+					<button ng-click="childAction()">Communicate to parent</button>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="span6">
+					<a ng-href="{{myHref}}" target="_blank">I'm feeling lucky, when I load</a>
+				</div>
+				<div class="span6">
+					<a href="{{myHref}}" target="_blank">I'm feeling 404</a>
+				</div>
+			</div>
+			<form name="signup_form" novalidateng-submit="signupForm()" ng-controller="signupController">
+				<fieldset>
+					<legend>Signup</legend>
+					<div class="row">
+						<div class="large-12 columns">
+							<label>Your name</label>
+							<input type="text" placeholder="Name" name="name" ng-model="signup.name"
+								ng-class="{error: signup_form.name.$dirty && signup_form.name.$invalid}"
+								ng-minlength="3" ng-maxlength="20" ng-focus required />
+							<div class="error" ng-show="signup_form.name.$dirty && signup_form.name.$invalid && !signup_form.name.$focused">
+								<small class="error" ng-show="signup_form.name.$error.required">
+									Your name is required.
+								</small>
+								<small class="error" ng-show="signup_form.name.$error.minlength">
+									Your name is required to be at least 3 characters
+								</small>
+								<small class="error" ng-show="signup_form.name.$error.maxlength">
+									Your name cannot be longer than 20 characters
+								</small>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="large-12 columns">
+							<label>Your email</label>
+							<input type="email" placeholder="Email" name="email" ng-model="signup.email"
+								ng-minlength="3" ng-maxlength="20" required />
+							<div class="error" ng-show="signup_form.email.$dirty && signup_form.email.$invalid && signup_form.submitted">
+							<small class="error" ng-show="signup_form.email.$error.required">
+								Your email is required.
+							</small>
+							<small class="error" ng-show="signup_form.email.$error.minlength">
+								Your email is required to be at least 3 characters
+							</small>
+							<small class="error" ng-show="signup_form.email.$error.email">
+								That is not a valid email. Please input a valid email.
+							</small>
+							<small class="error" ng-show="signup_form.email.$error.maxlength">
+								Your email cannot be longer than 20 characters
+							</small>
+							</div>
+						</div>
+					</div>
+					<div class="large-12 columns">
+						<label>Username</label>
+						<input type="text" placeholder="Desired username" name="username" ng-model="signup.username"
+							ng-minlength="3" ng-maxlength="20" ensure-unique="username" required />
+						<div class="error" ng-show="signup_form.username.$dirty && signup_form.username.$invalid && signup_form.submitted">
+							<small class="error" ng-show="signup_form.username.$error.required">
+								Please input a username
+							</small>
+							<small class="error" ng-show="signup_form.username.$error.minlength">
+								Your username is required to be at least 3 characters
+							</small>
+							<small class="error" ng-show="signup_form.username.$error.maxlength">
+								Your username cannot be longer than 20 characters
+							</small>
+							<small class="error" ng-show="signup_form.username.$error.unique">
+								That username is taken, please try another
+							</small>
+						</div>
+					</div>
+					<div class="large-12 columns">
+						<label>TUsername</label>
+						<input type="text" placeholder="test username" name="tusername" ng-model="signup.tusername"
+							ng-minlength="3" ng-maxlength="20" required />
+						<div class="error" ng-messages="signup_form.tusername.$error" ng-messages-multiple>
+							<div ng-message="required"> sure you enter your name</div>
+							<div ng-message="minlength">Your name must be at least 3 characters</div>
+							<div ng-message="maxlength">Your name cannot be longer than 20 characters</div>
+						</div>
+					</div>
+					<button type="submit" ng-disabled="signup_form.$invalid" class="button radius">Submit</button>
+				</fieldset>
+			</form>
 		</div>
 		
 		<script src="./lib/jquery-3.3.1.min.js" type="text/javascript"></script>
 		<script src="./lib/jqueryui/jquery-ui.min.js" type="text/javascript"></script>
 		<script src="./lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="./lib/angular.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="./lib/angular-messages.min.js"></script>
 		<script src="./lib/angular-route.min.js" type="text/javascript"></script>
 		<script type='text/javascript'>
-				function timeController($scope){
-					$scope.clock = {
+			var model = angular.module("myApp", ['ngMessages']);
+			model.controller("timeController", function($scope){
+				$scope.clock = {
 						now: new Date()
-					};
-					var updateClock = function(){
-						$scope.clock.now = new Date()
-					}
-					setInterval(function(){
-						$scope.$apply(updateClock);
-					}, 1000);
-					updateClock();
+				};
+				var updateClock = function(){
+					$scope.clock.now = new Date()
 				}
+				setInterval(function(){
+					$scope.$apply(updateClock);
+				}, 1000);
+			});
+			
+			model.controller("numberController", function($scope){
+				$scope.counter = 0;
+				$scope.add = function(amount) { $scope.counter += amount; };
+				$scope.subtract = function(amount) { $scope.counter -= amount; };
+			});
+			
+			model.controller('signupController', function($scope){
+				$scope.submitted = false;
+				$scope.signupForm = function() {
+					if ($scope.signup_form.$valid) {
+						// 正常提交
+					} else {
+						$scope.signup_form.submitted = true;
+					}
+				}
+			});
+			
+			/**model.directive('ensureUnique', function($http) {
+				return {
+					require: 'ngModel',
+					link: function(scope, ele, attrs, c) {
+						scope.$watch(attrs.ngModel, function(n) {
+							if (!n) return;
+							$http({
+								method: 'POST',
+								url: '/api/check/' + attrs.ensureUnique,
+								data: {
+									field: attrs.ensureUnique,
+									value: scope.ngModel
+								}
+							}).success(function(data) {
+								c.$setValidity('unique', data.isUnique);
+							}).error(function(data) {
+								c.$setValidity('unique', false);
+							});
+						});
+					}
+				};
+			});*/
+			
+			model.directive('ngFocus', [function() {
+				var FOCUS_CLASS = "ng-focused";
+				return {
+					restrict: 'A',
+					require: 'ngModel',
+					link: function(scope, element, attrs, ctrl) {
+						ctrl.$focused = false;
+						element.bind('focus', function(evt) {
+							element.addClass(FOCUS_CLASS);
+							scope.$apply(function() {
+								ctrl.$focused = true;
+							});
+						}).bind('blur', function(evt) {
+							element.removeClass(FOCUS_CLASS);
+							scope.$apply(function() {
+								ctrl.$focused = false;
+							});
+						});
+					}
+				};
+			}]);
+			
+			model.directive('myDirective', function(){
+				return {
+					rstrict: 'E',
+					replace: true,
+					template: '<a href="http://www.baidu.com" target="_blank">Click me to go to Baidu</a>'
+				}
+			});
+			
+			model.run(function($rootScope, $timeout){
+				$timeout(function(){
+					$rootScope.myHref = 'http://www.baidu.com';
+				}, 2000);
+			});
+			
+			model.controller("SomeController", function($scope){
+				// 最佳实践，永远使用一个模式
+				$scope.someModel = {
+					someValue: 'hello computer'
+				}
+				$scope.someAction = function() {
+					$scope.someModel.someValue = 'hello human, from parent';
+				};
+			}).controller("ChildController", function($scope){
+				$scope.childAction = function() {
+					$scope.someModel.someValue = 'hello human, from child';
+				};
+			})
 		</script>
 	</body>
 </html>
