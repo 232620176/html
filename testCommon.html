@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link src="./lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link src="./lib/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
+		<link src="./lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+		<style type='text/css'>
+			
+		</style>
+		
+		<!--[if lt IE 9]>
+			<script src="./lib/html5shiv.min.js}"></script>
+			<script src="./lib/respond.min.js}"></script>
+		<![endif]-->
+	</head>
+	
+	<body>
+		<div style="width:15px; height:15px; background-color:#00b0ec"></div>
+		
+		<script src="./lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+		<script src="./lib/jqueryui/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="./lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="./lib/common.js" type="text/javascript"></script>
+		<script src="./lib/angular.min.js" type="text/javascript"></script>
+		<script src="./lib/angular-route.min.js" type="text/javascript"></script>
+		<script type='text/javascript'>
+				var fun = function alertObject(obj){
+					alert(obj);
+				}
+				
+				function findParam(){
+					var str = "{{title.DATA}}↵↵{{productType.DATA}}↵交易时间：{{time.DATA}}↵交易类型：{{type.DATA}}↵交易金额：{{number.DATA}}↵{{remark.DATA}}	";
+					var p = /\{\{(.*?)\.DATA\}\}/g
+					console.log(str.match(p))
+					while(s = p.exec(str)){
+						console.log(s[1])
+					}
+				}
+				
+				findParam()
+				//confirmProcess("确认打印么？", fun("123"));
+		</script>
+	</body>
+</html>
